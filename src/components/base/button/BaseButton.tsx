@@ -1,15 +1,18 @@
 import Button from "@mui/material/Button";
+import { CircularIndeterminate } from "../progress/circularProgress";
 
 interface PropsButton {
   actionText: string;
   onClick: () => void;
   disabled: boolean;
+  loader?: boolean;
 }
 
 export const ButtonAction = ({
   actionText,
   onClick,
   disabled,
+  loader,
 }: PropsButton) => {
   return (
     <Button
@@ -19,7 +22,7 @@ export const ButtonAction = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {actionText}
+      {loader ? <CircularIndeterminate /> : actionText}
     </Button>
   );
 };

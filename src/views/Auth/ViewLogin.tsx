@@ -24,6 +24,7 @@ export const ViewLogin = () => {
     setErrorPasswordLogin,
     goToLoginAction,
     useHandleLoginAccess,
+    isLoading,
   } = useContext(AuthContext);
 
   useEffect(() => {
@@ -90,6 +91,7 @@ export const ViewLogin = () => {
                   actionText="Ingresar"
                   onClick={useHandleLoginAccess}
                   disabled={!goToLoginAction}
+                  loader={isLoading}
                 />
               </div>
             </div>

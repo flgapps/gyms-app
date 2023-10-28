@@ -35,6 +35,8 @@ interface AuthContextType {
 
   setHaveLogged: React.Dispatch<React.SetStateAction<boolean>>;
   haveLogged: boolean;
+
+  isLoading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType>(
@@ -59,6 +61,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     useState<string>("");
   const [errorEmailLogin, setErrorEmailLogin] = useState<boolean>(false);
   const [goToLoginAction, setGoToLoginAction] = useState<boolean>(false);
+  //Control del laoder:
+  const [isLoading, setisLoading] = useState<boolean>(false);
   const [errorPasswordLoginMessage, setErrorPasswordLoginMessage] =
     useState<string>("");
   const [errorPasswordLogin, setErrorPasswordLogin] = useState<boolean>(false);
@@ -102,6 +106,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   //Hander para hacer login, forzado por el momento:
 
   const useHandleLoginAccess = () => {
+    setisLoading(true);
+    setGoToLoginAction(false);
     if (haveConnectToApi === false && fakeUserInfo) {
       setInfoUser({
         username: fakeUserInfo.name,
@@ -109,6 +115,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         avatar: fakeUserInfo.avatar,
       });
       setTimeout(() => {
+        setisLoading(false);
         setHaveLogged(true);
       }, 2000);
     }
@@ -146,6 +153,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     setHaveLogged,
     haveLogged,
+
+    isLoading,
   };
 
   return (
