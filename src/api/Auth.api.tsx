@@ -1,10 +1,9 @@
-import { UserInfo } from "../context/Auth/AuthContext";
+import { UserAuthAcces, UserInfo } from "../interfaces/auth.interfaces";
 import { authApi } from "./BaseApi";
 
-export const loginUser = async (
-  email: string,
-  password: string
-): Promise<UserInfo> => {
+export const loginUser = async (access: UserAuthAcces): Promise<UserInfo> => {
+  const { email, password } = access;
+
   const payload = {
     email,
     password,

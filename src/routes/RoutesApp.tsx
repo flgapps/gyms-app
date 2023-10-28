@@ -8,11 +8,11 @@ import {
   ViewRegister,
   ViewUsers,
 } from "../views/Intex";
-import { useState } from "react";
-import { AuthProvider } from "../context/Auth/AuthContext";
+import { useContext } from "react";
+import { AuthContext, AuthProvider } from "../context/Auth/AuthContext";
 
 export const RoutesApp = () => {
-  const [haveLogged] = useState<boolean>(false);
+  const { haveLogged } = useContext(AuthContext);
 
   return (
     <div>
@@ -21,22 +21,18 @@ export const RoutesApp = () => {
           <Route
             path="/login"
             element={
-              <AuthProvider>
-                <AuthLayout>
-                  <ViewLogin />
-                </AuthLayout>
-              </AuthProvider>
+              <AuthLayout>
+                <ViewLogin />
+              </AuthLayout>
             }
           />
 
           <Route
             path="/register"
             element={
-              <AuthProvider>
-                <AuthLayout>
-                  <ViewRegister />
-                </AuthLayout>
-              </AuthProvider>
+              <AuthLayout>
+                <ViewRegister />
+              </AuthLayout>
             }
           />
           <Route path="/*" element={<Navigate to="/login" replace />} />
@@ -46,17 +42,21 @@ export const RoutesApp = () => {
           <Route
             path="/home"
             element={
-              <AdminLayout>
-                <ViewHome />
-              </AdminLayout>
+              <AuthProvider>
+                <AdminLayout>
+                  <ViewHome />
+                </AdminLayout>
+              </AuthProvider>
             }
           />
           <Route
             path="/dashboard"
             element={
-              <AdminLayout>
-                <ViewDashboard />
-              </AdminLayout>
+              <AuthProvider>
+                <AdminLayout>
+                  <ViewDashboard />
+                </AdminLayout>
+              </AuthProvider>
             }
           />
           <Route

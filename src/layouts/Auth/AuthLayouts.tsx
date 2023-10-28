@@ -1,5 +1,5 @@
 import { AvatarComponent } from "../../components/base/avatar/BaseAvatar";
-import AvatarGym from "../../assets/branding/logo_urban_gym.jpg";
+import AvatarApp from "../../assets/branding/gym__app_brand.png";
 import Box from "@mui/material/Box";
 import style from "../authLayout.styles.module.css";
 
@@ -13,8 +13,8 @@ export const AuthLayout = ({ children }: Props) => {
       <header className={style.center_content}>
         <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
           <AvatarComponent
-            imageSrc={AvatarGym}
-            altText="profile-avatar"
+            imageSrc={AvatarApp}
+            altText="app-avatar"
             width={160}
             height={160}
           />

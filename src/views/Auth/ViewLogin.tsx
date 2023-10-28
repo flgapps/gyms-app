@@ -4,6 +4,8 @@ import { AuthContext } from "../../context/Auth/AuthContext";
 import { InputPassword } from "../../components/base/inputs/Password/InputPassword";
 import { authValidateEmail } from "../../utils/auth.utils";
 import { ButtonAction } from "../../components/base/button/BaseButton";
+import { ViewImageCard } from "../../components/base/img-media/ImagaPlace";
+import AvatarGym from "../../assets/branding/logo_urban_gym.jpg";
 import style from "./Auth.module.css";
 
 export const ViewLogin = () => {
@@ -16,14 +18,12 @@ export const ViewLogin = () => {
     setErrorEmailLogin,
     errorEmailLoginMessage,
     setErrorEmailLoginMessage,
-
     errorPasswordLoginMessage,
     setErrorPasswordLoginMessage,
-
     errorPasswordLogin,
     setErrorPasswordLogin,
-
     goToLoginAction,
+    useHandleLoginAccess,
   } = useContext(AuthContext);
 
   useEffect(() => {
@@ -45,12 +45,18 @@ export const ViewLogin = () => {
   }, [loginAccount, setErrorEmailLogin, setErrorEmailLoginMessage]);
 
   useEffect(() => {
-    if (passwordAccount.length > 0 && passwordAccount.length <= 6) {
-      setErrorPasswordLogin(true);
-      setErrorPasswordLoginMessage("La contraseña es muy corta.");
-    } else if (passwordAccount.length === 0) {
-      setErrorPasswordLogin(false);
-      setErrorPasswordLoginMessage("");
+    if (passwordAccount) {
+      if (passwordAccount.length === 0) {
+        setErrorPasswordLogin(false);
+        setErrorPasswordLoginMessage("");
+      }
+      if (passwordAccount.length <= 5) {
+        setErrorPasswordLogin(true);
+        setErrorPasswordLoginMessage("La contraseña es muy corta.");
+      } else {
+        setErrorPasswordLogin(false);
+        setErrorPasswordLoginMessage("");
+      }
     }
   }, [passwordAccount, setErrorPasswordLoginMessage, setErrorPasswordLogin]);
 
@@ -58,34 +64,37 @@ export const ViewLogin = () => {
     <main className={style.container_login}>
       <section className={style.container_auth}>
         <div className={style.card}>
-          <h4 className={style.header_login}>Inicia Sesión</h4>
           <div>
-            <InputText
-              labelText="Email"
-              inputText={loginAccount}
-              placeholderText="Tu correo electrónico"
-              setInputText={setLoginAccount}
-              hasError={errorEmailLogin}
-              errorText={errorEmailLoginMessage}
-              nameReferenceInput="email-login"
-            />
-            <InputPassword
-              labelText="Contraseña"
-              inputText={passwordAccount}
-              placeholderText="Clave"
-              setInputText={setPasswordAccount}
-              hasError={errorPasswordLogin}
-              errorText={errorPasswordLoginMessage}
-              nameReferenceInput="email-password"
-            />
-            <div>
-              <ButtonAction
-                actionText="Ingresar"
-                onClick={() => alert("Login")}
-                disabled={goToLoginAction}
+            <h4 className={style.header_login}>Inicia Sesión</h4>
+            <div className={style.container_inputs}>
+              <InputText
+                labelText="Email"
+                inputText={loginAccount}
+                placeholderText="Tu correo electrónico"
+                setInputText={setLoginAccount}
+                hasError={errorEmailLogin}
+                errorText={errorEmailLoginMessage}
+                nameReferenceInput="email-login"
               />
+              <InputPassword
+                labelText="Contraseña"
+                inputText={passwordAccount}
+                placeholderText="Clave"
+                setInputPassword={setPasswordAccount}
+                hasError={errorPasswordLogin}
+                errorText={errorPasswordLoginMessage}
+                nameReferenceInput="email-password"
+              />
+              <div>
+                <ButtonAction
+                  actionText="Ingresar"
+                  onClick={useHandleLoginAccess}
+                  disabled={!goToLoginAction}
+                />
+              </div>
             </div>
           </div>
+          <ViewImageCard altIOmage="branding-gym" srcImage={AvatarGym} />
         </div>
       </section>
     </main>

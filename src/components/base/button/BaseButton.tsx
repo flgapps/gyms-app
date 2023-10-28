@@ -17,7 +17,7 @@ export const ButtonAction = ({
       variant="contained"
       sx={{ mt: 3, mb: 2 }}
       onClick={onClick}
-      disabled={!disabled}
+      disabled={disabled}
     >
       {actionText}
     </Button>

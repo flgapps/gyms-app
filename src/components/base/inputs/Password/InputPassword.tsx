@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 interface PropsPassword {
   labelText: string;
   inputPassword: string;
-  setInputPassword: (password: string) => void;
+  setInputPassword: (inputPassword: string) => void;
   hasError: boolean;
   errorText: string;
   placeholderText: string;
