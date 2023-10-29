@@ -1,7 +1,6 @@
 import { AvatarComponent } from "../../components/base/avatar/BaseAvatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 import { AuthContext } from "../../context/Auth/AuthContext";
 import { useContext } from "react";
 import { ListAside } from "../../components/navbar-aside/AsideOptions";
