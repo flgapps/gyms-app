@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -11,10 +10,9 @@ import { ButtonAction } from "../base/button/BaseButton";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 
 export const LoginComponents = () => {
-  const { loginAccount, passwordAccount, setLoginAccount, setPasswordAccount } =
-    useContext(useAuthContext);
+  const { loginAccount, setLoginAccount, passwordAccount, setPasswordAccount } = useAuthContext();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
@@ -48,14 +46,14 @@ export const LoginComponents = () => {
           />
           <InputPassword
             labelText="Contraseña"
-            inputPassword={}
+            inputPassword={passwordAccount}
             placeholderText="*****"
-            setInputPassword={}
-            hasError={}
-            errorText={}
+            setInputPassword={setPasswordAccount}
+            hasError={false}
+            errorText={""}
             nameReferenceInput="login-email"
           />
-          <InputUniqueCheckbox valueCheck="Recordarme" setValueCheck={} />
+          <InputUniqueCheckbox valueCheck="Recordarme" setValueCheck={() => ""} />
           <ButtonAction
             actionText="Iniciar sesión"
             onClick={() => alert("Login...")}

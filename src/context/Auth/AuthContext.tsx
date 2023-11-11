@@ -5,11 +5,11 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { UserAuthAcces, UserInfo } from "../../interfaces/auth.interfaces";
+import { UserInfo } from "../../interfaces/auth.interfaces";
 // import { useMutation } from "react-query";
 import infoUserGeneral from "../Auth/user.json";
 // import { loginUser } from "../../api/Auth.api";
-interface AuthContextType {
+export interface AuthContextType {
   infoUser: UserInfo;
   setInfoUser: React.Dispatch<React.SetStateAction<UserInfo>>;
   loginAccount: string;
@@ -43,7 +43,6 @@ export const AuthContext = createContext<AuthContextType>(
   {} as AuthContextType
 );
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
@@ -70,7 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [haveConnectToApi, _] = useState<boolean>(false);
   const [haveLogged, setHaveLogged] = useState<boolean>(false);
 
-  const fakeUserInfo = infoUserGeneral;
+  const fakeUserInfo: UserInfo = infoUserGeneral;
   const [infoUser, setInfoUser] = useState<UserInfo>(fakeUserInfo);
 
   useEffect(() => {
@@ -109,11 +108,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setisLoading(true);
     setGoToLoginAction(false);
     if (haveConnectToApi === false && fakeUserInfo) {
-      setInfoUser({
-        username: fakeUserInfo.name,
-        namegym: fakeUserInfo.gym,
-        avatar: fakeUserInfo.avatar,
-      });
+      setInfoUser(fakeUserInfo);
       setTimeout(() => {
         setisLoading(false);
         setHaveLogged(true);

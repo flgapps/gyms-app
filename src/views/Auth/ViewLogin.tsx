@@ -79,7 +79,7 @@ export const ViewLogin = () => {
               />
               <InputPassword
                 labelText="Contraseña"
-                inputText={passwordAccount}
+                inputPassword={passwordAccount}
                 placeholderText="Clave"
                 setInputPassword={setPasswordAccount}
                 hasError={errorPasswordLogin}

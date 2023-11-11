@@ -6,4 +6,6 @@ export interface UserInfo {
   username: string;
   namegym: string;
   avatar: string;
+  name?: string;
+  gym?: string;
 }

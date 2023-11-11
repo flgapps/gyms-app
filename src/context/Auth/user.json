@@ -1,8 +1,8 @@
 
 {
-    "email": "urban@gym.com",
+    "username": "urban@gym.com",
     "password": "urban123",
     "name": "Admin",
-    "gym": "Urban Traiging",
+    "namegym": "Urban Traiging",
     "avatar": "https://i.imgur.com/KG8vuTN.jpg"
 }
