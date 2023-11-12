@@ -7,45 +7,54 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import userFromJson from "./usersDashboard.json";
+import { createClient } from "@supabase/supabase-js";
+import { useState } from "react";
+
+const url: string = import.meta.env.VITE_SUPABASE_URL ?? "";
+const key: string = import.meta.env.VITE_SUPABASE_KEY ?? "";
+console.log(url);
+const supabase = createClient(url, key);
 
 interface Column {
-  id: "name" | "code" | "ending" | "activity" | "status";
+  id: "id" | "nombres" | "apellidos" | "created_at" | "actividades";
   label: string;
   width?: number;
   align?: "center";
   format?: (value: number) => string;
 }
 
+interface ICliente {
+  id: string;
+  nombres: string;
+  apellidos: string;
+  created_at: String;
+  actividades: {
+    abreviatura: string;
+  }[];
+}
+
 const columns: readonly Column[] = [
-  { id: "name", label: "Nombre", width: 170, align: "center" },
-  { id: "code", label: "Id N°", width: 30, align: "center" },
+  { id: "nombres", label: "Nombre/s", width: 170, align: "center" },
+  { id: "apellidos", label: "Apellido/s", width: 170, align: "center" },
+  { id: "id", label: "Id N°", width: 30, align: "center" },
   {
-    id: "ending",
+    id: "created_at",
     label: "Vencimiento",
     width: 170,
     align: "center",
-    format: (value: number) => value.toLocaleString("en-US"),
   },
   {
-    id: "activity",
-    label: "Acvitidades",
-    width: 120,
-    align: "center",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "status",
-    label: "Estado",
+    id: "actividades",
+    label: "Actividades",
     width: 120,
     align: "center",
   },
 ];
 
-const rows = userFromJson;
-
 export const ResumeHomeTable = () => {
-  const [page, setPage] = React.useState(0);
+  const [clientes, setClientes] = useState<ICliente[] | null>(null);
+
+  const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleChangePage = (_event: unknown, newPage: number) => {
@@ -58,6 +67,26 @@ export const ResumeHomeTable = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  React.useEffect(() => {
+    async function getClientes() {
+      let { data: clientes } = await supabase
+        .from("clientes")
+        .select(
+          `
+        id,
+        nombres,
+        apellidos,
+        created_at,
+        actividades(abreviatura)
+    `
+        )
+        .returns<ICliente[]>();
+      if (clientes != null) setClientes(clientes);
+    }
+
+    getClientes();
+  });
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -77,33 +106,48 @@ export const ResumeHomeTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.id === "activity" && Array.isArray(value)
-                            ? value.join(", ")
-                            : column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
+            {clientes != null
+              ? clientes
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((cliente) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={cliente.id}
+                      >
+                        {columns.map((column) => {
+                          let value;
+                          if (column.id === "actividades") {
+                            value = cliente.actividades.map(
+                              (v) => v.abreviatura
+                            );
+                          } else {
+                            value = cliente[column.id];
+                          }
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.id === "actividades" &&
+                              Array.isArray(value)
+                                ? value.join(", ")
+                                : column.format && typeof value === "number"
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })
+              : ""}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={clientes != null ? clientes.length : 0}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
