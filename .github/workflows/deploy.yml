@@ -44,8 +44,10 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          # Upload dist repository
           path: './dist'
+        env: # Or as an environment variable
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
