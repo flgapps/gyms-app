@@ -37,6 +37,8 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
+      - name: Prueba
+        run: echo "${{ secrets.SUPABASE_URL }}"
       - name: Build
         run: npm run build
         env: # Or as an environment variable
