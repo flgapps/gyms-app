@@ -1,4 +1,3 @@
-import { AvatarComponent } from "../../components/base/avatar/BaseAvatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { AuthContext } from "../../context/Auth/AuthContext";

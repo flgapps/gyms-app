@@ -8,7 +8,7 @@ import {
   ViewRegister,
   ViewUsers,
 } from "../views/Intex";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { AuthContext, AuthProvider } from "../context/Auth/AuthContext";
 
 export const RoutesApp = () => {
