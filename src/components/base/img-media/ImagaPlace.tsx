@@ -15,6 +15,8 @@ export const ViewImageCard = ({ srcImage, altIOmage }: MediaProps) => {
         justifyContent: "center",
         padding: "20px",
         objectFit: "cover",
+        width: "300px",
+        height: "220px"
       }}
       image={srcImage}
       alt={altIOmage}
