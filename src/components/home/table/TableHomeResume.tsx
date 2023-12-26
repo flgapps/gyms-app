@@ -7,13 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { createClient } from "@supabase/supabase-js";
-import { useState } from "react";
-
-const url: string = import.meta.env.VITE_SUPABASE_URL ?? "";
-const key: string = import.meta.env.VITE_SUPABASE_KEY ?? "";
-console.log(url);
-const supabase = createClient(url, key);
+import { useEffect, useState } from "react";
+import { useAuthContext } from "../../../context/Auth/AuthContext";
 
 interface Column {
   id: "id" | "nombres" | "apellidos" | "created_at" | "actividades";
@@ -54,6 +49,8 @@ const columns: readonly Column[] = [
 export const ResumeHomeTable = () => {
   const [clientes, setClientes] = useState<ICliente[] | null>(null);
 
+  const { supabase } = useAuthContext();
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -68,25 +65,25 @@ export const ResumeHomeTable = () => {
     setPage(0);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function getClientes() {
       let { data: clientes } = await supabase
         .from("clientes")
         .select(
           `
-        id,
-        nombres,
-        apellidos,
-        created_at,
-        actividades(abreviatura)
-    `
+            id,
+            nombres,
+            apellidos,
+            created_at,
+            actividades(abreviatura)
+          `
         )
         .returns<ICliente[]>();
       if (clientes != null) setClientes(clientes);
     }
 
     getClientes();
-  });
+  }, []);
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>

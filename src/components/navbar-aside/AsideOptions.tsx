@@ -11,8 +11,11 @@ import LaptopRoundedIcon from "@mui/icons-material/LaptopRounded";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import PaymentRoundedIcon from "@mui/icons-material/PaymentRounded";
+import { useAuthContext } from "../../context/Auth/AuthContext";
 
 export const ListAside = () => {
+
+  const { useHandleSignOutAccess } = useAuthContext();
   return (
     <Box sx={{ width: 250 }}>
       <List>
@@ -38,6 +41,14 @@ export const ListAside = () => {
             </ListItem>
           )
         )}
+        <ListItem key="Salir" disablePadding>
+              <ListItemButton onClick={() => useHandleSignOutAccess()}>
+                <ListItemIcon>
+                    <HouseRoundedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Salir" />
+              </ListItemButton>
+            </ListItem>
       </List>
       <Divider />
     </Box>

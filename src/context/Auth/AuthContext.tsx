@@ -5,13 +5,12 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { UserInfo } from "../../interfaces/auth.interfaces";
-// import { useMutation } from "react-query";
-import infoUserGeneral from "../Auth/user.json";
-// import { loginUser } from "../../api/Auth.api";
+import { Session, SupabaseClient, User } from "@supabase/supabase-js";
+import client from "../conexionDB";
+
 export interface AuthContextType {
-  infoUser: UserInfo;
-  setInfoUser: React.Dispatch<React.SetStateAction<UserInfo>>;
+  infoUser: User | null;
+  setInfoUser: React.Dispatch<React.SetStateAction<User | null>>;
   loginAccount: string;
   passwordAccount: string;
   setLoginAccount: React.Dispatch<React.SetStateAction<string>>;
@@ -33,10 +32,12 @@ export interface AuthContextType {
 
   useHandleLoginAccess: () => void;
 
-  setHaveLogged: React.Dispatch<React.SetStateAction<boolean>>;
-  haveLogged: boolean;
+  useHandleSignOutAccess: () => void;
 
   isLoading: boolean;
+
+  supabase: SupabaseClient<any, "public", any>;
+  session: Session | null;
 }
 
 export const AuthContext = createContext<AuthContextType>(
@@ -54,6 +55,24 @@ export const useAuthContext = () => {
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const [supabase] = useState(client());
+
   const [loginAccount, setLoginAccount] = useState<string>("");
   const [passwordAccount, setPasswordAccount] = useState<string>("");
   const [errorEmailLoginMessage, setErrorEmailLoginMessage] =
@@ -66,11 +85,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     useState<string>("");
   const [errorPasswordLogin, setErrorPasswordLogin] = useState<boolean>(false);
 
-  const [haveConnectToApi, _] = useState<boolean>(false);
-  const [haveLogged, setHaveLogged] = useState<boolean>(false);
-
-  const fakeUserInfo: UserInfo = infoUserGeneral;
-  const [infoUser, setInfoUser] = useState<UserInfo>(fakeUserInfo);
+  const [infoUser, setInfoUser] = useState<User | null>(null);
 
   useEffect(() => {
     if (
@@ -83,13 +98,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     } else {
       setGoToLoginAction(false);
     }
-  }, [
-    errorEmailLogin,
-    errorPasswordLogin,
-    loginAccount,
-    passwordAccount,
-    setGoToLoginAction,
-  ]);
+  }, [errorEmailLogin, errorPasswordLogin, loginAccount, passwordAccount]);
 
   //Hander para el login a bbdd:
 
@@ -104,22 +113,42 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   //Hander para hacer login, forzado por el momento:
 
-  const useHandleLoginAccess = () => {
+  const useHandleLoginAccess = async () => {
     setisLoading(true);
     setGoToLoginAction(false);
-    if (haveConnectToApi === false && fakeUserInfo) {
-      setInfoUser(fakeUserInfo);
-      setTimeout(() => {
-        setisLoading(false);
-        setHaveLogged(true);
-      }, 2000);
-    }
-    return;
-    /* const dataLogin = {
+
+    const { data, error } = await client().auth.signInWithPassword({
       email: loginAccount,
       password: passwordAccount,
-    };
-    accesLogin.mutateAsync(dataLogin); */
+    });
+
+    if (error) {
+      setErrorEmailLoginMessage(error.message);
+      return;
+    } else {
+      setInfoUser(data.user);
+      setisLoading(false);
+      setSession(data.session);
+    }
+    return;
+  };
+
+  const useHandleSignOutAccess = async () => {
+    setisLoading(true);
+    setGoToLoginAction(false);
+
+    const { error } = await client().auth.signOut();
+
+    if (error) {
+      setErrorEmailLoginMessage(error.message);
+      return;
+    } else {
+      setInfoUser(null);
+      setisLoading(false);
+      setSession(null);
+      setGoToLoginAction(true);
+    }
+    return;
   };
 
   const contextValue: AuthContextType = {
@@ -146,10 +175,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     useHandleLoginAccess,
 
-    setHaveLogged,
-    haveLogged,
-
     isLoading,
+    supabase,
+    session,
+    useHandleSignOutAccess
   };
 
   return (

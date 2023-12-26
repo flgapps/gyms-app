@@ -4,7 +4,7 @@ import { RoutesApp } from "./routes/RoutesApp";
 export const App = () => {
   return (
     <AuthProvider>
-      <RoutesApp />;
+      <RoutesApp />
     </AuthProvider>
   );
 };

@@ -9,18 +9,9 @@ import { InputUniqueCheckbox } from "../base/inputs/OneCheckbox/OneCheckbox";
 import { ButtonAction } from "../base/button/BaseButton";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 
-export const LoginComponents = () => {
-  const { loginAccount, setLoginAccount, passwordAccount, setPasswordAccount } = useAuthContext();
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
+export const LoginComponents = async () => {
+  const { loginAccount, setLoginAccount, passwordAccount, setPasswordAccount } =
+    useAuthContext();
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -34,7 +25,7 @@ export const LoginComponents = () => {
         <Typography component="h1" variant="h5">
           Iniciar Sesión
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" noValidate sx={{ mt: 1 }}>
           <InputText
             labelText="Email"
             inputText={loginAccount}
@@ -53,7 +44,10 @@ export const LoginComponents = () => {
             errorText={""}
             nameReferenceInput="login-email"
           />
-          <InputUniqueCheckbox valueCheck="Recordarme" setValueCheck={() => ""} />
+          <InputUniqueCheckbox
+            valueCheck="Recordarme"
+            setValueCheck={() => ""}
+          />
           <ButtonAction
             actionText="Iniciar sesión"
             onClick={() => alert("Login...")}

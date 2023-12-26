@@ -8,15 +8,15 @@ import {
   ViewRegister,
   ViewUsers,
 } from "../views/Intex";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext, AuthProvider } from "../context/Auth/AuthContext";
 
 export const RoutesApp = () => {
-  const { haveLogged } = useContext(AuthContext);
+  const { session } = useContext(AuthContext);
 
   return (
     <div>
-      {!haveLogged ? (
+      {!session ? (
         <Routes>
           <Route
             path="/login"

@@ -25,6 +25,7 @@ export const ViewLogin = () => {
     goToLoginAction,
     useHandleLoginAccess,
     isLoading,
+    useHandleSignOutAccess
   } = useContext(AuthContext);
 
   useEffect(() => {
@@ -61,11 +62,16 @@ export const ViewLogin = () => {
     }
   }, [passwordAccount, setErrorPasswordLoginMessage, setErrorPasswordLogin]);
 
+  const handleSubmit = () => {
+    useHandleSignOutAccess();
+  }
+
+
   return (
     <main className={style.container_login}>
       <section className={style.container_auth}>
         <div className={style.card}>
-          <div>
+          <form onSubmit={handleSubmit}>
             <h4 className={style.header_login}>Inicia Sesión</h4>
             <div className={style.container_inputs}>
               <InputText
@@ -95,7 +101,7 @@ export const ViewLogin = () => {
                 />
               </div>
             </div>
-          </div>
+          </form>
           <ViewImageCard altIOmage="branding-gym" srcImage={AvatarGym} />
         </div>
       </section>

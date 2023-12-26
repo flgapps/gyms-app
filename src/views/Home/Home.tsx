@@ -7,7 +7,7 @@ export const ViewHome = () => {
   const { infoUser } = useContext(AuthContext);
   return (
     <main>
-      <h2>Bienvenido, {infoUser.name} </h2>
+      <h2>Bienvenido, {infoUser?.email} </h2>
       <br />
       <AllCardsResume />
       <br />

@@ -17,19 +17,12 @@ export const AdminLayout = ({ children }: Props) => {
     <div className={style.auth_layout_container}>
       <header className={style.header_container}>
         <Box sx={{ display: "flex", width: "100%" }}>
-          <AvatarComponent
-            imageSrc={infoUser && infoUser?.avatar}
-            altText="profile-avatar"
-            width={60}
-            height={60}
-          />
+
           <Box className={style.badge_container}>
             <Typography className={style.badge_name_user}>
-              {infoUser && infoUser?.name}
+              {infoUser && infoUser?.email}
             </Typography>
-            <Typography className={style.badge_description_user}>
-              {infoUser && infoUser?.gym}
-            </Typography>
+
           </Box>
         </Box>
       </header>
