@@ -9,8 +9,8 @@ const options = {
   },
 };
 
-const url: string = import.meta.env.VITE_SUPABASE_URL ?? "";
-const key: string = import.meta.env.VITE_SUPABASE_KEY ?? "";
+const url: string = process.env.SUPABASE_URL?? import.meta.env.VITE_SUPABASE_URL ?? "";
+const key: string = process.env.SUPABASE_KEY?? import.meta.env.VITE_SUPABASE_KEY ?? "";
 
 const supabase = createClient(url, key, options);
 
